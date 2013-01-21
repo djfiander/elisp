@@ -25,7 +25,7 @@
 (defun calc-isbn10-checksum (isbn)
   "Given an ISBN as a string, calculate the checksum.
 The formula used is
-    (sum(k=1:9) digit(k) * k) mod 11
+    (sum(k=1:9) digit(k) * (11-k)) mod 11
 This function does not support hyphenated ISBNs."
   (let ((weights '(10 9 8 7 6 5 4 3 2)))
     (- 11 (mod (apply '+ (mapcar* '* (mapcar 'isbn-digit (substring isbn 0 -1))
@@ -46,10 +46,7 @@ This function does not support hyphenated ISBNs."
 	 10)))
 
 (defun isbn-numberp (isbn)
-  "Check ISBN to see if it is a valid ISBN.
-Use the standard ISBN checksum function:
-        (sum(k=1:9) digit(k) * k) mod 11 == digit(10)
-where X as a digit has value 10."
+  "Check ISBN to see if it is a valid ISBN."
   (= (isbn-digit (elt isbn (- (length isbn) 1)))
      (cond
       ((= (length isbn) 10)
